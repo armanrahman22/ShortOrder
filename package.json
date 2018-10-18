@@ -4,9 +4,6 @@
   "description": "A natural language conversational agent for ordering and organizing items from a catalog.",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
-  "files": [
-    "build/src"
-  ],
   "author": "Michael Hopcroft",
   "license": "MIT",
   "keywords": [],
