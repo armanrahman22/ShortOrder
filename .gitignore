@@ -1,5 +1,4 @@
-build/
 junk*
 .env
-
-
+package
+node_modules

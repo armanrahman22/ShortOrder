@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../src/relevance_test/index.ts"],"names":[],"mappings":";;AAAA,mDAA+F;AAAvF,6CAAA,iBAAiB,CAAA;AAAE,4CAAA,gBAAgB,CAAA;AAAE,0CAAA,cAAc,CAAA;AAAE,oCAAA,QAAQ,CAAA","sourcesContent":["export {AggregatedResults, runRelevanceTest, RelevanceSuite, TestCase} from './relevance_test';\n"]}

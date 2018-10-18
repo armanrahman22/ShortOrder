@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../src/menu/index.ts"],"names":[],"mappings":";;AAAA,+BAAsC;AAA9B,sBAAA,IAAI,CAAA","sourcesContent":["export {Menu, MenuItem} from './menu';\n"]}

@@ -1,0 +1,1 @@
+{"version":3,"file":"recognizer.js","sourceRoot":"","sources":["../../../src/tokenizer/recognizer.ts"],"names":[],"mappings":"","sourcesContent":["import {Token} from '.';\n\nexport interface Recognizer {\n  apply: (token: Token) => Token[];\n  stemmer: (term: string) => string;\n  terms: () => Set<string>;\n}\n"]}
