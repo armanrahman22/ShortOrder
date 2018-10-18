@@ -3,7 +3,14 @@
   "compilerOptions": {
     "declaration": true,
     "inlineSources": true,
-    "lib": ["es2017"],
+    "lib": [
+      "es2017",
+      "es5",
+      "es6",
+      "es2016",
+      "dom"
+    ],
+    "downlevelIteration": true,
     "outDir": "build",
     "rootDir": ".",
     "sourceMap": true,
