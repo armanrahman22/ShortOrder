@@ -1,1 +1,1 @@
-export { Pipeline, printToken, printTokens, tokenToString } from './pipeline';
+export {Pipeline, printToken, printTokens, tokenToString} from './pipeline';

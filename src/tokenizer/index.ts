@@ -1,6 +1,6 @@
-export { generateAliases } from './alias_generator'; 
-export { Index, indexYamlFilename, Item, PatternRecognizer } from './pattern_recognizer';
-export { Recognizer } from './recognizer';
+export {generateAliases} from './alias_generator';
+export {Index, indexYamlFilename, Item, PatternRecognizer} from './pattern_recognizer';
+export {Recognizer} from './recognizer';
 export * from './tokenizer';
 export * from './tokens';
 export * from './types';

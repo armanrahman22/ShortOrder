@@ -1,6 +1,6 @@
 {
   "name": "short-order",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A natural language conversational agent for ordering and organizing items from a catalog.",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
@@ -14,22 +14,21 @@
     "compile": "tsc -p .",
     "fix": "gts fix",
     "prepare": "npm run compile",
-    "postinstall": "npm run compile",
     "pretest": "npm run compile",
     "posttest": "npm run check"
   },
   "devDependencies": {
-    "gts": "^0.8.0",
-    "mocha": "^5.2.0",
-    "typescript": "~2.8.0",
     "@types/chai": "^4.1.6",
     "@types/dotenv": "^4.0.3",
     "@types/js-yaml": "^3.11.2",
     "@types/mocha": "^5.2.5",
-    "@types/murmurhash": "0.0.0",
+    "@types/murmurhash": "0.0.1",
     "@types/node": "^10.11.4",
     "@types/readline-sync": "^1.4.3",
-    "chai": "^4.2.0"
+    "chai": "^4.2.0",
+    "gts": "^0.8.0",
+    "mocha": "^5.2.0",
+    "typescript": "~2.8.0"
   },
   "dependencies": {
     "dotenv": "^6.0.0",

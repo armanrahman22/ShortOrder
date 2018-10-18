@@ -1,135 +1,113 @@
 import { CompositeRecognizer } from '../recognizers';
 import { ATTRIBUTE, AttributeToken, CreateAttributeRecognizer } from '../recognizers';
-import { ENTITY, CreateEntityRecognizer, EntityToken } from '../recognizers';
-import { INTENT, CreateIntentRecognizer, IntentToken } from '../recognizers';
-import { QUANTITY, CreateQuantityRecognizer, NumberRecognizer, QuantityToken } from '../recognizers';
-import { Recognizer, StemmerFunction, Token, Tokenizer, UnknownToken, UNKNOWN } from '../tokenizer';
+import { CreateEntityRecognizer, ENTITY, EntityToken } from '../recognizers';
+import { CreateIntentRecognizer, INTENT, IntentToken } from '../recognizers';
+import { CreateQuantityRecognizer, NumberRecognizer, QUANTITY, QuantityToken } from '../recognizers';
+import { Recognizer, StemmerFunction, Token, Tokenizer, UNKNOWN, UnknownToken } from '../tokenizer';
 
 
-type AnyToken = UnknownToken | AttributeToken | EntityToken | IntentToken | QuantityToken;
+type AnyToken =
+  UnknownToken | AttributeToken | EntityToken | IntentToken | QuantityToken;
 
 export function tokenToString(t: Token) {
-    const token = t as AnyToken;
-    let name: string;
-    switch (token.type) {
-        case ATTRIBUTE:
-            const attribute = token.name.replace(/\s/g, '_').toUpperCase();
-            name = `[ATTRIBUTE:${attribute},${token.id}]`;
-            break;
-        case ENTITY:
-            const entity = token.name.replace(/\s/g, '_').toUpperCase();
-            name = `[ENTITY:${entity},${token.pid}]`;
-            break;
-        case INTENT:
-            name = `[INTENT:${token.name}]`;
-            break;
-        case QUANTITY:
-            name = `[QUANTITY:${token.value}]`;
-            break;
-        default:
-            name = `[UNKNOWN:${token.text}]`;
-    }
-    return name;
+  const token = t as AnyToken;
+  let name: string;
+  switch (token.type) {
+    case ATTRIBUTE:
+      const attribute = token.name.replace(/\s/g, '_').toUpperCase();
+      name = `[ATTRIBUTE:${attribute},${token.id}]`;
+      break;
+    case ENTITY:
+      const entity = token.name.replace(/\s/g, '_').toUpperCase();
+      name = `[ENTITY:${entity},${token.pid}]`;
+      break;
+    case INTENT:
+      name = `[INTENT:${token.name}]`;
+      break;
+    case QUANTITY:
+      name = `[QUANTITY:${token.value}]`;
+      break;
+    default:
+      name = `[UNKNOWN:${token.text}]`;
+  }
+  return name;
 }
 
 export function printToken(t: Token) {
-    const token = t as AnyToken;
-    let name: string;
-    switch (token.type) {
-        case ATTRIBUTE:
-            const attribute = token.name.replace(/\s/g, '_').toUpperCase();
-            name = `ATTRIBUTE: ${attribute}(${token.id})`;
-            break;
-        case ENTITY:
-            const entity = token.name.replace(/\s/g, '_').toUpperCase();
-            name = `ENTITY: ${entity}(${token.pid})`;
-            break;
-        case INTENT:
-            name = `INTENT: ${token.name}`;
-            break;
-        case QUANTITY:
-            name = `QUANTITY: ${token.value}`;
-            break;
-        default:
-            name = 'UNKNOWN';
-    }
-    console.log(`${name}: "${token.text}"`);
+  const token = t as AnyToken;
+  let name: string;
+  switch (token.type) {
+    case ATTRIBUTE:
+      const attribute = token.name.replace(/\s/g, '_').toUpperCase();
+      name = `ATTRIBUTE: ${attribute}(${token.id})`;
+      break;
+    case ENTITY:
+      const entity = token.name.replace(/\s/g, '_').toUpperCase();
+      name = `ENTITY: ${entity}(${token.pid})`;
+      break;
+    case INTENT:
+      name = `INTENT: ${token.name}`;
+      break;
+    case QUANTITY:
+      name = `QUANTITY: ${token.value}`;
+      break;
+    default:
+      name = 'UNKNOWN';
+  }
+  console.log(`${name}: "${token.text}"`);
 }
 
 export function printTokens(tokens: Token[]) {
-    tokens.forEach(printToken);
-    console.log();
+  tokens.forEach(printToken);
+  console.log();
 }
 
 export class Pipeline {
-    attributeRecognizer: Recognizer;
-    entityRecognizer: Recognizer;
-    intentRecognizer: Recognizer;
-    numberRecognizer: Recognizer;
-    quantityRecognizer: Recognizer;
+  attributeRecognizer: Recognizer;
+  entityRecognizer: Recognizer;
+  intentRecognizer: Recognizer;
+  numberRecognizer: Recognizer;
+  quantityRecognizer: Recognizer;
 
-    compositeRecognizer: CompositeRecognizer;
+  compositeRecognizer: CompositeRecognizer;
 
-    constructor(
-        entityFile: string,
-        intentsFile: string,
-        attributesFile: string,
-        quantifierFile: string,
-        stemmer: StemmerFunction = Tokenizer.defaultStemTerm,
-        debugMode = false
-    ) {
-        this.intentRecognizer = CreateIntentRecognizer(
-            intentsFile,
-            new Set(),
-            stemmer,
-            debugMode);
+  constructor(
+    entityFile: string, intentsFile: string, attributesFile: string,
+    quantifierFile: string,
+    stemmer: StemmerFunction = Tokenizer.defaultStemTerm, debugMode = false) {
+    this.intentRecognizer =
+      CreateIntentRecognizer(intentsFile, new Set(), stemmer, debugMode);
 
-        this.quantityRecognizer = CreateQuantityRecognizer(
-            quantifierFile,
-            new Set(),
-            stemmer,
-            debugMode);
+    this.quantityRecognizer =
+      CreateQuantityRecognizer(quantifierFile, new Set(), stemmer, debugMode);
 
-        this.numberRecognizer = new NumberRecognizer();
+    this.numberRecognizer = new NumberRecognizer();
 
-        const attributeBadWords = new Set([
-            ...this.quantityRecognizer.terms(),
-            ...this.numberRecognizer.terms()
-        ]);
+    const attributeBadWords = new Set(
+      [...this.quantityRecognizer.terms(), ...this.numberRecognizer.terms()]);
 
-        this.attributeRecognizer = CreateAttributeRecognizer(
-            attributesFile,
-            attributeBadWords,
-            stemmer,
-            debugMode);
+    this.attributeRecognizer = CreateAttributeRecognizer(
+      attributesFile, attributeBadWords, stemmer, debugMode);
 
-        const entityBadWords = new Set([
-            ...this.intentRecognizer.terms(),
-            ...this.quantityRecognizer.terms(),
-            ...this.attributeRecognizer.terms()
-        ]);
+    const entityBadWords = new Set([
+      ...this.intentRecognizer.terms(), ...this.quantityRecognizer.terms(),
+      ...this.attributeRecognizer.terms()
+    ]);
 
-        this.entityRecognizer = CreateEntityRecognizer(
-            entityFile,
-            entityBadWords,
-            stemmer,
-            debugMode);
+    this.entityRecognizer =
+      CreateEntityRecognizer(entityFile, entityBadWords, stemmer, debugMode);
 
-        this.compositeRecognizer = new CompositeRecognizer(
-            [
-                this.entityRecognizer,
-                this.attributeRecognizer,
-                this.numberRecognizer,
-                this.quantityRecognizer,
-                this.intentRecognizer
-            ],
-            debugMode
-        );
-    }
+    this.compositeRecognizer = new CompositeRecognizer(
+      [
+        this.entityRecognizer, this.attributeRecognizer,
+        this.numberRecognizer, this.quantityRecognizer, this.intentRecognizer
+      ],
+      debugMode);
+  }
 
-    processOneQuery(query: string, debugMode = false) {
-        const input = { type: UNKNOWN, text: query };
-        const tokens = this.compositeRecognizer.apply(input);
-        return tokens;
-    }
+  processOneQuery(query: string, debugMode = false) {
+    const input = { type: UNKNOWN, text: query };
+    const tokens = this.compositeRecognizer.apply(input);
+    return tokens;
+  }
 }
